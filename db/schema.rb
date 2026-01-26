@@ -1,0 +1,25 @@
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
+#
+# It's strongly recommended that you check this file into your version control system.
+
+ActiveRecord::Schema[8.1].define(version: 2026_01_26_212230) do
+  create_table "event_entries", id: false, force: :cascade do |t|
+    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.string "idx", null: false
+    t.string "klass", null: false
+    t.json "meta_info"
+    t.json "props", null: false
+    t.bigint "version", default: 1, null: false
+    t.index ["created_at"], name: "index_event_entries_on_created_at"
+    t.index ["idx", "version"], name: "index_event_entries_on_idx_and_version", unique: true
+    t.index ["idx"], name: "index_event_entries_on_idx"
+  end
+end

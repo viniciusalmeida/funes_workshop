@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/funes-org/funes.git
+  revision: a769146b5fe4d9a82b5cfef36ff2006ff3ef75c7
+  branch: main
+  specs:
+    funes-rails (0.1.1)
+      rails (>= 7.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -411,6 +419,7 @@ DEPENDENCIES
   bundler-audit
   capybara
   debug
+  funes-rails!
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
