@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/funes-org/funes.git
-  revision: a769146b5fe4d9a82b5cfef36ff2006ff3ef75c7
+  revision: c9f946836c12d5b0a1c31214baa84a7c13f89c80
   branch: main
   specs:
     funes-rails (0.1.1)
@@ -182,8 +182,7 @@ GEM
     mini_magick (5.3.1)
       logger
     mini_mime (1.1.5)
-    minitest (6.0.1)
-      prism (~> 1.5)
+    minitest (5.25.5)
     msgpack (1.8.0)
     net-imap (0.6.2)
       date
@@ -424,6 +423,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal
+  minitest (< 5.26)
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.2)
