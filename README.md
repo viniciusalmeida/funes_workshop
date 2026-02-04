@@ -1,24 +1,56 @@
-# README
+# Funes workshop
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A host application that demonstrates the [`funes-rails`](https://github.com/funes-org/funes) gem.
 
-Things you may want to cover:
+## Use case
 
-* Ruby version
+The problem being solved as demonstration. **Disclaimer:** this is an over simplification for didactic purposes.  
 
-* System dependencies
+### Debt life-cycle management
 
-* Configuration
+- Simple interest (only over the principal balance) accrued daily
+- Fixed annual interest rate
+- Non pre-established repayment scheduling
+    - Payments anytime with any value
+    - All payments pays interest first, principal later
+    - Payments, to be considered valid, must cover at least the accrued interest
 
-* Database creation
+**Interest formula:** `accrued_interest = principal × (annual_rate / 365) × days_elapsed`
 
-* Database initialization
+#### Interest accrual without payment
 
-* How to run the test suite
+$ 10.000 as principal and 10% as annual interest.
 
-* Services (job queues, cache servers, search engines, etc.)
+| Date       | Days elapsed | Principal   | Acc interest | Payment | Present value |
+|:-----------|:------------|:------------|:-------------|:--------|:--------------|
+| 01/01/2025 | 0           | $ 10,000.00 | $ 0.00       | $ 0.00  | $ 10,000.00   |
+| 01/01/2026 | 365         | $ 10,000.00 | $ 1,000.00   | $ 0.00  | $ 11,000.00   |
 
-* Deployment instructions
+![](https://raw.github.com/funes-org/funes/main/chart.png)
 
-* ...
+#### Interest accrual with payment
+
+$ 10.000 as principal and 10% as annual interest. With payment ~6 months after the contract date. 
+
+| OBS             | Date       | Days elapsed | Principal   | Acc interest | Payment     | Present value |
+|:----------------|:-----------|:-----|:------------|:-------------|:------------|:--------------|
+|                 | 01/01/2025 | 0    | $ 10,000.00 | $ 0.00       | $ 0.00      | $ 10,000.00   |
+| Payment         | 07/01/2025 | 181  | $ 10,000.00 | $ 495.89     | $ -5,000.00 | $ 10,495.89   |
+| Post pay. state | 07/01/2025 | 0    | $ 5,495.89  | $ 0.00       | $ 0.00      | $ 5,495.89    |
+|                 | 01/01/2026 | 184  | $ 5,495.89  | $ 277.05     | $ 0.00      | $ 5,772.94    |
+
+![](https://raw.github.com/funes-org/funes/main/chart-2.png)
+
+#### Interest accrual with payment and final repayment
+
+$ 10.000 as principal and 10% as annual interest. With payment ~6 months after the contract date and final repayment 1 year after the contract date.
+
+| OBS                 | Date       | Days elapsed | Principal   | Acc interest | Payment     | Present value |
+|:--------------------|:-----------|:-----|:------------|:-------------|:------------|:--------------|
+|                     | 01/01/2025 | 0    | $ 10,000.00 | $ 0.00       | $ 0.00      | $ 10,000.00   |
+| 1st payment         | 07/01/2025 | 181  | $ 10,000.00 | $ 495.89     | $ -5,000.00 | $ 10,495.89   |
+| Post 1st pay. state | 07/01/2025 | 0    | $ 5,495.89  | $ 0.00       | $ 0.00      | $ 5,495.89    |
+| 2nd payment         | 01/01/2026 | 184  | $ 5,495.89  | $ 277.05     | $ -5,772.94 | $ 5,772.94    |
+| Post 2nd pay. state | 01/01/2026 | 0    | $ 0.00      | $ 0.00       | $ 0.00      | $ 0.00        |
+
+![](https://raw.github.com/funes-org/funes/main/chart-3.png)
