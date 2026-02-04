@@ -2,6 +2,13 @@
 
 A host application that demonstrates the [`funes-rails`](https://github.com/funes-org/funes) gem.
 
+## Getting started
+
+To see the core concepts in action, start with:
+
+- [`app/projections/virtual_debt_projection.rb`](app/projections/virtual_debt_projection.rb) — a projection that derives debt state from events
+- [`test/projections/virtual_debt_projection_test.rb`](test/projections/virtual_debt_projection_test.rb) — tests that illustrate how the projection behaves
+
 ## Use case
 
 The problem being solved as demonstration. **Disclaimer:** this is an over simplification for didactic purposes.  
