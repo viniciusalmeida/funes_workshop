@@ -54,7 +54,7 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
       assert result.principal.negative?, "payment led the debt state to inform a negative principal"
       assert result.invalid?, "debts with negative principal are not valid"
       assert result.errors["principal"].include?("must be greater than or equal to 0"),
-                   "sets the proper error message in the model"
+             "sets the proper error message in the model"
     end
   end
 

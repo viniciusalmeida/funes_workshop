@@ -26,7 +26,7 @@ $ 10.000 as principal and 10% as annual interest.
 | 01/01/2025 | 0           | $ 10,000.00 | $ 0.00       | $ 0.00  | $ 10,000.00   |
 | 01/01/2026 | 365         | $ 10,000.00 | $ 1,000.00   | $ 0.00  | $ 11,000.00   |
 
-![](https://raw.github.com/funes-org/funes/main/chart.png)
+![](https://raw.github.com/viniciusalmeida/funes_workshop/main/chart.png)
 
 #### Interest accrual with payment
 
@@ -39,7 +39,7 @@ $ 10.000 as principal and 10% as annual interest. With payment ~6 months after t
 | Post pay. state | 07/01/2025 | 0    | $ 5,495.89  | $ 0.00       | $ 0.00      | $ 5,495.89    |
 |                 | 01/01/2026 | 184  | $ 5,495.89  | $ 277.05     | $ 0.00      | $ 5,772.94    |
 
-![](https://raw.github.com/funes-org/funes/main/chart-2.png)
+![](https://raw.github.com/viniciusalmeida/funes_workshop/main/chart-2.png)
 
 #### Interest accrual with payment and final repayment
 
@@ -53,4 +53,4 @@ $ 10.000 as principal and 10% as annual interest. With payment ~6 months after t
 | 2nd payment         | 01/01/2026 | 184  | $ 5,495.89  | $ 277.05     | $ -5,772.94 | $ 5,772.94    |
 | Post 2nd pay. state | 01/01/2026 | 0    | $ 0.00      | $ 0.00       | $ 0.00      | $ 0.00        |
 
-![](https://raw.github.com/funes-org/funes/main/chart-3.png)
+![](https://raw.github.com/viniciusalmeida/funes_workshop/main/chart-3.png)
