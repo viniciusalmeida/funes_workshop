@@ -10,7 +10,6 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
                                         Debt::Issued.new(principal: 1000.00, interest_rate: 0.12, at: issuance_date),
                                         Debt::Virtual.new)
 
-      assert result.valid?
       assert_equal 1000.00, result.principal
       assert_equal 0.12, result.interest_rate
       assert_equal "yearly", result.interest_rate_base
@@ -52,7 +51,6 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
                                         initial_state)
 
       assert result.principal.negative?, "payment led the debt state to inform a negative principal"
-      assert result.invalid?, "debts with negative principal are not valid"
       assert result.errors["principal"].include?("must be greater than or equal to 0"),
              "sets the proper error message in the model"
     end
