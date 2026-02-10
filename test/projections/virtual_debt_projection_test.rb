@@ -60,7 +60,7 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
       event = Debt::PaymentReceived.new(amount: 10, at: Date.new(2025, 7, 1))
       interpret_event_based_on(VirtualDebtProjection, event, initial_state)
 
-      assert_equal event.errors[:amount], ["must be greater than the accrued interest."]
+      assert_equal event.errors[:amount], [ "must be greater than the accrued interest." ]
     end
   end
 
