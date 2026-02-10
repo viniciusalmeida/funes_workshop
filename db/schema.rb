@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_26_212230) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_10_183917) do
+  create_table "debts", id: false, force: :cascade do |t|
+    t.date "contract_date", null: false
+    t.string "idx", null: false
+    t.date "last_payment_date"
+    t.integer "status", default: 0
+    t.index ["idx"], name: "index_debts_on_idx", unique: true
+  end
+
   create_table "event_entries", id: false, force: :cascade do |t|
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.string "idx", null: false

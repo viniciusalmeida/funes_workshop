@@ -1,4 +1,6 @@
 class VirtualDebtProjection < Funes::Projection
+  include InterestCalculator
+
   materialization_model Debt::Virtual
 
   interpretation_for Debt::Issued do |state, issuance_event|
@@ -12,8 +14,7 @@ class VirtualDebtProjection < Funes::Projection
   end
 
   interpretation_for Debt::PaymentReceived do |state, payment_received_event|
-    interest = simple_interest(state.principal,
-                               daily_interest_rate(state.interest_rate, state.interest_rate_base),
+    interest = simple_interest(state.principal, daily_interest_rate(state.interest_rate, state.interest_rate_base),
                                days_between(state.last_payment_at || state.contract_date, payment_received_event.at))
     new_principal = (state.principal - (payment_received_event.amount - interest)).round(2)
     payment_received_event
@@ -37,23 +38,5 @@ class VirtualDebtProjection < Funes::Projection
   private
     def self.present_value(principal, daily_rate, days)
       principal + simple_interest(principal, daily_rate, days)
-    end
-
-    def self.simple_interest(principal, daily_rate, days)
-      principal * daily_rate * days
-    end
-
-    def self.days_between(first_date, second_date)
-      (first_date - second_date).abs.to_i
-    end
-
-    def self.daily_interest_rate(interest_rate, interest_rate_base)
-      rate = BigDecimal(interest_rate)
-
-      case interest_rate_base
-      when "yearly"  then rate / 365
-      when "monthly" then rate * 12 / 365
-      when "daily"   then rate
-      end
     end
 end
