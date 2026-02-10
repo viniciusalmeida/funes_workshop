@@ -12,16 +12,14 @@ class VirtualDebtProjection < Funes::Projection
   end
 
   interpretation_for Debt::PaymentReceived do |state, payment_received_event|
-    # TODO: missing concern enforcement for the minimal payment
+    interest = simple_interest(state.principal,
+                               daily_interest_rate(state.interest_rate, state.interest_rate_base),
+                               days_between(state.last_payment_at || state.contract_date, payment_received_event.at))
+    new_principal = (state.principal - (payment_received_event.amount - interest)).round(2)
+    payment_received_event
+      .errors.add(:amount, "must be greater than the accrued interest.") if interest > payment_received_event.amount
 
-    accrued_interest = simple_interest(state.principal,
-                                       daily_interest_rate(state.interest_rate, state.interest_rate_base),
-                                       days_between(state.last_payment_at || state.contract_date,
-                                                    payment_received_event.at))
-    paid_principal = payment_received_event.amount - accrued_interest
-
-    state.assign_attributes(principal: (state.principal - paid_principal).round(2),
-                            present_value: (state.principal - paid_principal).round(2),
+    state.assign_attributes(principal: new_principal, present_value: new_principal,
                             last_payment_at: payment_received_event.at)
     state
   end

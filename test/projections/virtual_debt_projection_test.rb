@@ -56,6 +56,14 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
       assert result.errors["principal"].include?("must be greater than or equal to 0"),
              "sets the proper error message in the model"
     end
+
+    test "returns invalid event when the payment amount doesn't cover the accrued interest" do
+      initial_state = Debt::Virtual.new(interest_rate: 0.10, contract_date: Date.new(2025, 1, 1), principal: 10000)
+      event = Debt::PaymentReceived.new(amount: 10, at: Date.new(2025, 7, 1))
+      interpret_event_based_on(VirtualDebtProjection, event, initial_state)
+
+      assert_equal event.errors[:amount], ["must be greater than the accrued interest."]
+    end
   end
 
   describe "final_state" do
