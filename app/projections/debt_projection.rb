@@ -12,12 +12,14 @@ class DebtProjection < Funes::Projection
   end
 
   interpretation_for Debt::PaymentReceived do |state, payment_received_event|
-    interest = simple_interest(state.principal, state.daily_interest_rate,
-                               days_between(state.last_payment_date || state.contract_date, payment_received_event.at))
-    new_principal = (state.principal - (payment_received_event.amount - interest)).round(2)
+    principal_after_payment, = process_payment(state.principal, state.daily_interest_rate,
+                                               interest_accrued_since: state.last_payment_date || state.contract_date,
+                                               payment_amount: payment_received_event.amount,
+                                               payment_date: payment_received_event.at)
+                                 .values_at(:principal_after_payment)
 
-    state.principal = new_principal
-    state.assign_attributes(status: new_principal.zero? ? :repaid : state.status,
+    state.principal = principal_after_payment
+    state.assign_attributes(status: principal_after_payment.zero? ? :repaid : state.status,
                             last_payment_date: payment_received_event.at)
     state
   end

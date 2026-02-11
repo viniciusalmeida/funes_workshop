@@ -14,11 +14,15 @@ class VirtualDebtProjection < Funes::Projection
   end
 
   interpretation_for Debt::PaymentReceived do |state, payment_received_event|
-    interest = simple_interest(state.principal, daily_interest_rate(state.interest_rate, state.interest_rate_base),
-                               days_between(state.last_payment_at || state.contract_date, payment_received_event.at))
-    new_principal = (state.principal - (payment_received_event.amount - interest)).round(2)
+    new_principal, acc_interest = process_payment(state.principal,
+                                                  daily_interest_rate(state.interest_rate, state.interest_rate_base),
+                                                  interest_accrued_since: state.last_payment_at || state.contract_date,
+                                                  payment_amount: payment_received_event.amount,
+                                                  payment_date: payment_received_event.at)
+                                    .values_at(:principal_after_payment, :accrued_interest)
+
     payment_received_event
-      .errors.add(:amount, "must be greater than the accrued interest.") if interest > payment_received_event.amount
+      .errors.add(:amount, "must be greater than the accrued interest.") if acc_interest > payment_received_event.amount
 
     state.assign_attributes(principal: new_principal, present_value: new_principal,
                             last_payment_at: payment_received_event.at)
