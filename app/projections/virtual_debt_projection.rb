@@ -1,6 +1,4 @@
 class VirtualDebtProjection < Funes::Projection
-  include InterestCalculator
-
   materialization_model Debt::Virtual
 
   interpretation_for Debt::Issued do |state, issuance_event|
@@ -14,11 +12,13 @@ class VirtualDebtProjection < Funes::Projection
   end
 
   interpretation_for Debt::PaymentReceived do |state, payment_received_event|
-    new_principal, acc_interest = process_payment(state.principal,
-                                                  daily_interest_rate(state.interest_rate, state.interest_rate_base),
-                                                  interest_accrued_since: state.last_payment_at || state.contract_date,
-                                                  payment_amount: payment_received_event.amount,
-                                                  payment_date: payment_received_event.at)
+    new_principal, acc_interest = InterestCalculator
+                                    .process_payment(state.principal,
+                                                     InterestCalculator.daily_interest_rate(state.interest_rate,
+                                                                                            state.interest_rate_base),
+                                                     interest_accrued_since: state.last_payment_at || state.contract_date,
+                                                     payment_amount: payment_received_event.amount,
+                                                     payment_date: payment_received_event.at)
                                     .values_at(:principal_after_payment, :accrued_interest)
 
     payment_received_event
@@ -30,17 +30,11 @@ class VirtualDebtProjection < Funes::Projection
   end
 
   final_state do |state, as_of|
-    calculated_present_value = present_value(state.principal,
-                                             daily_interest_rate(state.interest_rate, state.interest_rate_base),
-                                             days_between(state.last_payment_at || state.contract_date,
-                                                          as_of.to_date))
+    daily_rate = InterestCalculator.daily_interest_rate(state.interest_rate, state.interest_rate_base)
+    days = InterestCalculator.days_between(state.last_payment_at || state.contract_date, as_of.to_date)
+    calculated_present_value = state.principal + InterestCalculator.simple_interest(state.principal, daily_rate, days)
 
     state.assign_attributes(present_value: calculated_present_value.round(2))
     state
   end
-
-  private
-    def self.present_value(principal, daily_rate, days)
-      principal + simple_interest(principal, daily_rate, days)
-    end
 end
