@@ -69,3 +69,5 @@ group :test do
   gem "selenium-webdriver"
   gem "minitest", "< 5.26"
 end
+
+gem "nanoid", "~> 2.0"

@@ -1,0 +1,29 @@
+<tr class="border-b-2 border-black transition-colors relative hover:bg-gray-100 [&.highlighted]:bg-orange-400"
+    data-controller="<%= "highlight" if local_assigns[:highlight] %>">
+  <td class="border-r-2 p-4">
+    <%= link_to debt_path(debt),
+                class: "text-gray-400 block underline underline-offset-2 inline-block",
+                data: { controller: "tooltip",
+                        tooltip_url_value: debt_path(debt),
+                        action: "mouseenter->tooltip#show mouseleave->tooltip#hide" } do %>
+      <%= debt.idx %><sup class="text-xs">ⓘ</sup>
+      <div data-tooltip-target="tooltip"
+           class="hidden z-50 bg-gray-50 border-2 border-gray-600 p-4 text-black
+                  shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)]">
+        <turbo-frame id="debt_details_<%= debt.idx %>" loading="lazy">
+          <p class="text-sm text-gray-400">Loading...</p>
+        </turbo-frame>
+      </div>
+    <% end %>
+  </td>
+  <td class="border-r-2 p-4"><%= debt.contract_date %></td>
+  <td class="p-4 relative">
+    <% color = case debt.status
+         when "repaid" then "bg-lime-500"
+         else "bg-yellow-300"
+       end %>
+    <span class="border-2 <%= color %> px-2 py-1 text-xs uppercase font-black">
+      <%= debt.status %>
+    </span>
+  </td>
+</tr>

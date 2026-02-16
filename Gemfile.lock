@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/funes-org/funes.git
-  revision: 556adf91092f956f4ca6a3e65ce740b7dd8eb937
+  revision: 9d648b53bc43e19c987229b716f32e49c6de4b5d
   branch: main
   specs:
     funes-rails (0.1.1)
@@ -185,7 +185,8 @@ GEM
     mini_mime (1.1.5)
     minitest (5.25.5)
     msgpack (1.8.0)
-    net-imap (0.6.2)
+    nanoid (2.0.0)
+    net-imap (0.6.3)
       date
       net-protocol
     net-pop (0.1.2)
@@ -224,7 +225,7 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
-    prism (1.8.0)
+    prism (1.9.0)
     propshaft (1.3.1)
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
@@ -237,7 +238,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.2.4)
+    rack (3.2.5)
     rack-session (2.1.1)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -425,6 +426,7 @@ DEPENDENCIES
   jbuilder
   kamal
   minitest (< 5.26)
+  nanoid (~> 2.0)
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.2)

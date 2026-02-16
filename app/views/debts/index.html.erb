@@ -1,0 +1,22 @@
+<div class="py-4">
+  <h1 class="text-5xl font-bold">Debt management</h1>
+</div>
+<div class="grid grid-cols-3 space-x-5">
+  <div id="debt_form">
+    <%= render "form", event: @new_event %>
+  </div>
+  <div class="col-span-2 mt-2.5">
+    <table class="w-full border-collapse border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+      <thead>
+        <tr class="border-b-2 border-black bg-gray-200 uppercase text-left tracking-tighter">
+          <th class="border-r-2 p-4">IDx</th>
+          <th class="border-r-2 p-4">Contract date</th>
+          <th class="p-4">Status</th>
+        </tr>
+      </thead>
+      <tbody id="debts">
+        <%= render partial: "debt_row", collection: @debts, as: :debt %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="py-4">
+  <h1 class="text-5xl font-bold">Debt</h1>
+</div>
+
+<turbo-frame id="debt_details_<%= @debt_id %>">
+  <fieldset class="border p-3">
+    <legend>Debt</legend>
+
+    <p><span class="font-black">IDx:</span> <%= @debt_id %></p>
+    <p><span class="font-black">Principal:</span> <%= number_to_currency(@debt.principal) %></p>
+    <p><span class="font-black">Interest:</span> <%= @debt.interest_rate %> (<%= @debt.interest_rate_base %>)</p>
+    <p><span class="font-black">Contract date:</span> <%= @debt.contract_date %></p>
+    <p>
+      <span class="font-black">Present value:</span>
+      <span class="underline underline-offset-2"><%= number_to_currency(@debt.present_value) %></span>
+    </p>
+  </fieldset>
+</turbo-frame>
+
+<%= link_to "<- back to debts list", debts_path, class: "text-gray-400 uppercase mt-3 block underline underline-offset-2" %>
