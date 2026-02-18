@@ -52,7 +52,7 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
 
       assert result.principal.negative?, "payment led the debt state to inform a negative principal"
       refute result.valid?, "debts with negative principal are not valid"
-      assert_equal result.errors[:present_value], ["cannot be negative - the debt is being overpaid!"],
+      assert_equal result.errors[:present_value], [ "cannot be negative - the debt is being overpaid!" ],
                    "sets the proper error message in the model"
     end
 
