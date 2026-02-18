@@ -21,8 +21,9 @@ class VirtualDebtProjection < Funes::Projection
                                                      payment_date: payment_received_event.at)
                                     .values_at(:principal_after_payment, :accrued_interest)
 
-    payment_received_event
-      .errors.add(:amount, "must be greater than the accrued interest.") if acc_interest > payment_received_event.amount
+    if acc_interest > payment_received_event.amount
+      payment_received_event.errors.add(:amount, "must be greater than the accrued interest ($#{acc_interest}).")
+    end
 
     state.assign_attributes(principal: new_principal, present_value: new_principal,
                             last_payment_at: payment_received_event.at)

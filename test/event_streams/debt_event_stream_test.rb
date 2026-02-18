@@ -35,7 +35,7 @@ class DebtEventStreamTest < ActiveSupport::TestCase
         event_stream.append(underpayment)
       end
 
-      assert_includes underpayment.errors[:amount], "must be greater than the accrued interest.",
+      assert_includes underpayment.errors[:amount], "must be greater than the accrued interest ($49.59).",
                       "after 6 months, accrued interest is ~$49.59, so a $10 payment should be rejected"
     end
 

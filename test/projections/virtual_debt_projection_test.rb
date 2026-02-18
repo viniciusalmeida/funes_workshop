@@ -44,7 +44,7 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
       assert_equal result.last_payment_at, Date.new(2025, 7, 1), "records payment date as last amortization"
     end
 
-    test "returns invalid state when overpayment causes negative principal" do
+    test "returns invalid state when overpayment causes negative present_value" do
       initial_state = Debt::Virtual.new(interest_rate: 0.10, contract_date: Date.new(2025, 1, 1), principal: 10000)
       result = interpret_event_based_on(VirtualDebtProjection,
                                         Debt::PaymentReceived.new(amount: 15000, at: Date.new(2025, 7, 1)),
@@ -52,8 +52,8 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
 
       assert result.principal.negative?, "payment led the debt state to inform a negative principal"
       refute result.valid?, "debts with negative principal are not valid"
-      assert result.errors["principal"].include?("must be greater than or equal to 0"),
-             "sets the proper error message in the model"
+      assert_equal result.errors[:present_value], ["cannot be negative - the debt is being overpaid!"],
+                   "sets the proper error message in the model"
     end
 
     test "returns invalid event when the payment amount doesn't cover the accrued interest" do
@@ -61,7 +61,7 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
       event = Debt::PaymentReceived.new(amount: 10, at: Date.new(2025, 7, 1))
       interpret_event_based_on(VirtualDebtProjection, event, initial_state)
 
-      assert_equal event.errors[:amount], [ "must be greater than the accrued interest." ]
+      assert_equal event.errors[:amount], [ "must be greater than the accrued interest ($495.89)." ]
     end
   end
 
