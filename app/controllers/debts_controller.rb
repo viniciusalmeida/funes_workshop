@@ -5,27 +5,22 @@ class DebtsController < ApplicationController
 
   def create
     idx = Nanoid.generate(size: 8, alphabet: NANO_ALPHABET)
-    @event = Debt::Issued.new(event_params)
+    @new_event = Debt::Issued.new(event_params)
     stream = DebtEventStream.for(idx)
-    stream.append(@event)
+    stream.append(@new_event)
 
-    if @event.persisted?
-      @new_debt = Debt.find(idx)
-      @new_event = Debt::Issued.new
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to debt_path(stream) }
-      end
-    else
-      @new_event = @event
-      render :index, status: :unprocessable_entity
+    return render :index, status: :unprocessable_entity unless @new_event.persisted?
+
+    respond_to do |format|
+      format.turbo_stream { @new_debt = Debt.find(idx) }
+      format.html { redirect_to debt_path(stream) }
     end
   end
 
   def show
     @debt_id = params[:id]
-    @debt = DebtEventStream.for(@debt_id)
-                           .projected_with(VirtualDebtProjection)
+    @event_stream = DebtEventStream.for(params[:id])
+    @debt = @event_stream.projected_with(VirtualDebtProjection)
   end
 
   def index

@@ -1,0 +1,26 @@
+<%# locals: (object:) %>
+
+<% if object.errors.any? %>
+  <div class="border-2 border-red-500 bg-red-50 p-4 mb-4 text-sm relative"
+       data-controller="flash">
+    <button data-action="click->flash#dismiss"
+            class="text-red-700 text-sm font-normal -top-3 right-2 absolute bg-red-50 px-1
+                   py-0.5 cursor-pointer">Close [X]</button>
+    <% if object.state_errors.any? %>
+      <p>State errors:</p>
+      <ul>
+        <% object.state_errors.full_messages.each do |msg| %>
+          <li class="text-red-700 font-bold"><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if object.own_errors.any? %>
+      <ul>
+        <% object.own_errors.full_messages.each do |msg| %>
+          <li class="text-red-700 font-bold"><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>

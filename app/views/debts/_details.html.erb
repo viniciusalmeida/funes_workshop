@@ -1,0 +1,19 @@
+<%# locals: (debt_id:, debt:, highlight: false) %>
+
+<%= turbo_frame_tag "debt_details_#{debt_id}" do %>
+  <fieldset class="border p-3">
+    <legend>Debt</legend>
+
+    <p><span class="font-black">IDx:</span> <%= debt_id %></p>
+    <p><span class="font-black">Principal:</span> <%= number_to_currency(debt.principal) %></p>
+    <p><span class="font-black">Interest:</span> <%= debt.interest_rate %> (<%= debt.interest_rate_base %>)</p>
+    <p><span class="font-black">Contract date:</span> <%= debt.contract_date %></p>
+    <p>
+      <span class="font-black">Present value:</span>
+      <span class="underline underline-offset-2 [&.highlighted]:bg-orange-400"
+            data-controller="<%= "highlight" if highlight %>">
+        <%= number_to_currency(debt.present_value) %>
+      </span>
+    </p>
+  </fieldset>
+<% end %>

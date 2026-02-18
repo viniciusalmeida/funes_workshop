@@ -1,0 +1,26 @@
+<%# locals: (new_event: Debt::PaymentReceived.new, debt_event_stream:, notice: nil) %>
+
+<%= turbo_frame_tag "new-payment" do %>
+  <fieldset class="border p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+    <legend>New payment</legend>
+
+    <%= render "shared/notice", notice: notice if notice %>
+    <%= render "shared/form_errors", object: new_event %>
+
+    <%= form_with model: new_event, url: debt_payments_path(debt_event_stream), scope: :debt_payment_received do |f| %>
+      <%= f.label :amount %>
+      <%= f.number_field :amount, step: 0.01, class: "mb-2 w-full border p-2 focus:outline-none focus:ring-2 focus:ring-black" %>
+
+      <%= f.label :at %>
+      <%= f.date_field :at, class: "mb-2 w-full border p-2 focus:outline-none focus:ring-2 focus:ring-black
+                                    text-black [&::-webkit-datetime-edit]:text-gray-400
+                                    [&.has-value]:text-black [&.has-value::-webkit-datetime-edit]:text-black",
+                       data: { controller: "date-field-state", action: "change->date-field-state#toggleStateClass" } %>
+
+      <%= f.submit class: "my-5 border-2 border-black bg-gray-200 px-6 py-2 font-bold text-black
+                           shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px]
+                           hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]
+                           active:translate-x-[4px] active:translate-y-[4px] active:shadow-none uppercase" %>
+    <% end %>
+  </fieldset>
+<% end %>

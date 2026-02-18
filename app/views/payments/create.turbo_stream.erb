@@ -1,0 +1,12 @@
+<%= turbo_stream.replace "debt_details_#{@debt_event_stream.to_param}" do %>
+  <%= render "debts/details", debt_id: @debt_event_stream.to_param, debt: @debt, highlight: true %>
+<% end %>
+
+<%= turbo_stream.append "events" do %>
+  <%= render "debts/event", event: @new_event, highlight: true %>
+<% end %>
+
+<%= turbo_stream.replace "new-payment" do %>
+  <%= render "payments/form", debt_event_stream: @debt_event_stream,
+             notice: "Payment was successfully recorded." %>
+<% end %>

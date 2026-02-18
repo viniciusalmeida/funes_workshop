@@ -1,5 +1,7 @@
+<%# locals: (debt:, highlight: false) %>
+
 <tr class="border-b-2 border-black transition-colors relative hover:bg-gray-100 [&.highlighted]:bg-orange-400"
-    data-controller="<%= "highlight" if local_assigns[:highlight] %>">
+    data-controller="<%= "highlight" if highlight %>">
   <td class="border-r-2 p-4">
     <%= link_to debt_path(debt),
                 class: "text-gray-400 block underline underline-offset-2 inline-block",
@@ -10,9 +12,9 @@
       <div data-tooltip-target="tooltip"
            class="hidden z-50 bg-gray-50 border-2 border-gray-600 p-4 text-black
                   shadow-[4px_4px_0px_0px_rgba(0,0,0,0.4)]">
-        <turbo-frame id="debt_details_<%= debt.idx %>" loading="lazy">
+        <%= turbo_frame_tag "debt_details_#{debt.idx}", loading: :lazy do %>
           <p class="text-sm text-gray-400">Loading...</p>
-        </turbo-frame>
+        <% end %>
       </div>
     <% end %>
   </td>
