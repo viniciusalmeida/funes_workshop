@@ -61,3 +61,29 @@ $ 10.000 as principal and 10% as annual interest. With payment ~6 months after t
 | Post 2nd pay. state | 01/01/2026 | 0    | $ 0.00      | $ 0.00       | $ 0.00      | $ 0.00        |
 
 ![](https://raw.github.com/viniciusalmeida/funes_workshop/main/chart-3.png)
+
+## JSON API
+
+The app exposes a JSON REST API under the `/api` namespace. No authentication required.
+
+### Create a debt
+
+```bash
+curl -s -X POST http://localhost:3000/api/debts \
+  -H "Content-Type: application/json" \
+  -d '{"debt": {"principal": 1000, "interest_rate": 0.1, "interest_rate_base": "yearly", "at": "2025-01-01"}}'
+```
+
+### Get debt state (with present value)
+
+```bash
+curl -s http://localhost:3000/api/debts/IDX
+```
+
+### Create a payment
+
+```bash
+curl -s -X POST http://localhost:3000/api/debts/IDX/payments \
+  -H "Content-Type: application/json" \
+  -d '{"payment": {"amount": 500, "at": "2025-07-01"}}'
+```

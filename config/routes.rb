@@ -13,6 +13,12 @@ Rails.application.routes.draw do
     resources :payments, only: [ :new, :create ]
   end
 
+  namespace :api do
+    resources :debts, only: [ :create, :show ] do
+      resources :payments, only: [ :create ]
+    end
+  end
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
