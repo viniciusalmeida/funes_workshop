@@ -20,14 +20,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_10_183917) do
   end
 
   create_table "event_entries", id: false, force: :cascade do |t|
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "created_at", null: false
     t.string "idx", null: false
     t.string "klass", null: false
     t.json "meta_info"
+    t.datetime "occurred_at", null: false
     t.json "props", null: false
     t.bigint "version", default: 1, null: false
     t.index ["created_at"], name: "index_event_entries_on_created_at"
     t.index ["idx", "version"], name: "index_event_entries_on_idx_and_version", unique: true
     t.index ["idx"], name: "index_event_entries_on_idx"
+    t.index ["occurred_at"], name: "index_event_entries_on_occurred_at"
   end
 end
