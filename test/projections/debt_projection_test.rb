@@ -9,7 +9,7 @@ class DebtProjectionTest < ActiveSupport::TestCase
       result = interpret_event_based_on(DebtProjection,
                                         Debt::Issued.new(principal: 1000.00, interest_rate: 0.12, at: issuance_date),
                                         Debt.new,
-                                        issuance_date.to_time)
+                                        issuance_date)
 
       assert_equal issuance_date, result.contract_date
       assert result.open?
@@ -23,7 +23,7 @@ class DebtProjectionTest < ActiveSupport::TestCase
       result = interpret_event_based_on(DebtProjection,
                                         Debt::PaymentReceived.new(amount: 5000, at: Date.new(2025, 7, 1)),
                                         initial_state,
-                                        Time.new(2025, 7, 1))
+                                        Date.new(2025, 7, 1))
 
       assert result.open?
       assert_equal Date.new(2025, 7, 1), result.last_payment_date
@@ -36,7 +36,7 @@ class DebtProjectionTest < ActiveSupport::TestCase
       result = interpret_event_based_on(DebtProjection,
                                         Debt::PaymentReceived.new(amount: 5772.94, at: Date.new(2026, 1, 1)),
                                         post_first_payment_state,
-                                        Time.new(2026, 1, 1))
+                                        Date.new(2026, 1, 1))
 
       assert_equal 0.00, result.principal
       assert result.repaid?
