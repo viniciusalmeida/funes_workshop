@@ -14,7 +14,9 @@ class Api::DebtsController < Api::BaseController
 
   def show
     stream = DebtEventStream.for(params[:id])
-    render json: debt_json(params[:id], stream.projected_with(VirtualDebtProjection))
+    render json: debt_json(params[:id], stream.projected_with(VirtualDebtProjection,
+                                                              at: params[:at],
+                                                              as_of: params[:as_of]))
   end
 
   private
