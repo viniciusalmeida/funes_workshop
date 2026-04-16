@@ -1,6 +1,9 @@
 module InterestCalculator
   module_function
 
+  DAYS_IN_YEAR   = BigDecimal("365").freeze
+  MONTHS_IN_YEAR = BigDecimal("12").freeze
+
   def simple_interest(principal, daily_rate, days)
     principal * daily_rate * days
   end
@@ -10,11 +13,11 @@ module InterestCalculator
   end
 
   def daily_interest_rate(interest_rate, interest_rate_base)
-    rate = BigDecimal(interest_rate)
+    rate = interest_rate.is_a?(BigDecimal) ? interest_rate : BigDecimal(interest_rate.to_s)
 
     case interest_rate_base
-    when "yearly"  then rate / 365
-    when "monthly" then rate * 12 / 365
+    when "yearly"  then rate / DAYS_IN_YEAR
+    when "monthly" then rate * MONTHS_IN_YEAR / DAYS_IN_YEAR
     when "daily"   then rate
     end
   end

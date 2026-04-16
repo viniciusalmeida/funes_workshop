@@ -5,6 +5,7 @@ class Debt::Virtual
   attribute :principal, :decimal
   attribute :interest_rate, :decimal
   attribute :interest_rate_base, :string, default: "yearly"
+  attribute :daily_rate, :decimal
   attribute :present_value, :decimal
   attribute :contract_date, :date
   attribute :last_payment_at, :date

@@ -56,6 +56,10 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # In-process benchmarking (bypass Puma/network to measure funes mechanisms directly)
+  gem "benchmark-ips", "~> 2.0"
+  gem "stackprof"
 end
 
 group :development do
