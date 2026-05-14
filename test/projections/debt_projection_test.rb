@@ -3,13 +3,13 @@ require "test_helper"
 class DebtProjectionTest < ActiveSupport::TestCase
   include Funes::ProjectionTestHelper
 
+  projection DebtProjection
+
   describe "interpretation_for Debt::Issued" do
     test "initializes debt state from issuance event" do
       issuance_date = Date.new(2025, 6, 15)
-      result = interpret_event_based_on(DebtProjection,
-                                        Debt::Issued.new(principal: 1000.00, interest_rate: 0.12, at: issuance_date),
-                                        Debt.new,
-                                        issuance_date)
+      result = interpret(Debt::Issued.new(principal: 1000.00, interest_rate: 0.12, at: issuance_date),
+                         given: Debt.new, at: issuance_date)
 
       assert_equal issuance_date, result.contract_date
       assert result.open?
@@ -18,12 +18,10 @@ class DebtProjectionTest < ActiveSupport::TestCase
 
   describe "interpretation_for Debt::PaymentReceived" do
     test "keeps debt open when payment does not zero out principal" do
-      initial_state = Debt.new(daily_interest_rate: BigDecimal(0.00027397), contract_date: Date.new(2025, 1, 1),
-                               principal: 10000, status: :open)
-      result = interpret_event_based_on(DebtProjection,
-                                        Debt::PaymentReceived.new(amount: 5000, at: Date.new(2025, 7, 1)),
-                                        initial_state,
-                                        Date.new(2025, 7, 1))
+      previous_state = Debt.new(daily_interest_rate: BigDecimal(0.00027397), contract_date: Date.new(2025, 1, 1),
+                                principal: 10000, status: :open)
+      result = interpret(Debt::PaymentReceived.new(amount: 5000, at: Date.new(2025, 7, 1)),
+                         given: previous_state, at: Date.new(2025, 7, 1))
 
       assert result.open?
       assert_equal Date.new(2025, 7, 1), result.last_payment_date
@@ -33,10 +31,8 @@ class DebtProjectionTest < ActiveSupport::TestCase
       post_first_payment_state = Debt.new(daily_interest_rate: BigDecimal(0.00027397),
                                           contract_date: Date.new(2025, 1, 1), principal: 5495.89,
                                           last_payment_date: Date.new(2025, 7, 1), status: :open)
-      result = interpret_event_based_on(DebtProjection,
-                                        Debt::PaymentReceived.new(amount: 5772.94, at: Date.new(2026, 1, 1)),
-                                        post_first_payment_state,
-                                        Date.new(2026, 1, 1))
+      result = interpret(Debt::PaymentReceived.new(amount: 5772.94, at: Date.new(2026, 1, 1)),
+                         given: post_first_payment_state, at: Date.new(2026, 1, 1))
 
       assert_equal 0.00, result.principal
       assert result.repaid?
