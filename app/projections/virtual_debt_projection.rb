@@ -22,7 +22,7 @@ class VirtualDebtProjection < Funes::Projection
                                     .values_at(:principal_after_payment, :accrued_interest)
 
     if acc_interest > payment_received_event.amount
-      payment_received_event.errors.add(:amount, "must be greater than the accrued interest ($#{acc_interest}).")
+      payment_received_event.errors.add(:amount, "must be greater than the accrued interest (#{acc_interest.format}).")
     end
 
     state.assign_attributes(principal: new_principal, present_value: new_principal,
@@ -35,7 +35,7 @@ class VirtualDebtProjection < Funes::Projection
     days = InterestCalculator.days_between(state.last_payment_at || state.contract_date, as_of.to_date)
     calculated_present_value = state.principal + InterestCalculator.simple_interest(state.principal, daily_rate, days)
 
-    state.assign_attributes(present_value: calculated_present_value.round(2))
+    state.assign_attributes(present_value: calculated_present_value)
     state
   end
 end

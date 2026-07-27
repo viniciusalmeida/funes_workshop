@@ -3,5 +3,7 @@ class Debt < ApplicationRecord
 
   enum :status, { open: 0, repaid: 1 }
 
-  attr_accessor :principal, :daily_interest_rate
+  monetize :principal_cents
+
+  attr_accessor :daily_interest_rate
 end

@@ -34,7 +34,7 @@ class DebtProjectionTest < ActiveSupport::TestCase
       result = interpret(Debt::PaymentReceived.new(amount: 5772.94, at: Date.new(2026, 1, 1)),
                          given: post_first_payment_state, at: Date.new(2026, 1, 1))
 
-      assert_equal 0.00, result.principal
+      assert_equal Money.from_amount(0), result.principal
       assert result.repaid?
       assert_equal Date.new(2026, 1, 1), result.last_payment_date
     end

@@ -10,11 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_10_183917) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_25_145235) do
   create_table "debts", id: false, force: :cascade do |t|
     t.date "contract_date", null: false
     t.string "idx", null: false
     t.date "last_payment_date"
+    t.integer "principal_cents", default: 0, null: false
+    t.string "principal_currency", default: "USD", null: false
     t.integer "status", default: 0
     t.index ["idx"], name: "index_debts_on_idx", unique: true
   end

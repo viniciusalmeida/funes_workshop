@@ -178,6 +178,16 @@ GEM
       logger
     mini_mime (1.1.5)
     minitest (5.25.5)
+    monetize (2.0.0)
+      money (~> 7.0)
+    money (7.0.2)
+      bigdecimal
+      i18n (~> 1.9)
+    money-rails (3.0.0)
+      activesupport (>= 7.0)
+      monetize (~> 2.0)
+      money (~> 7.0)
+      railties (>= 7.0)
     msgpack (1.8.0)
     nanoid (2.0.0)
     net-imap (0.6.4)
@@ -420,6 +430,7 @@ DEPENDENCIES
   jbuilder
   kamal
   minitest (< 5.26)
+  money-rails (~> 3.0)
   nanoid (~> 2.0)
   propshaft
   puma (>= 5.0)

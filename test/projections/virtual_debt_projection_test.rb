@@ -11,10 +11,10 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
       result = interpret(Debt::Issued.new(principal: 1000.00, interest_rate: 0.12, at: issuance_date),
                          given: Debt::Virtual.new)
 
-      assert_equal 1000.00, result.principal
+      assert_equal Money.from_amount(1000), result.principal
       assert_equal 0.12, result.interest_rate
       assert_equal "yearly", result.interest_rate_base
-      assert_equal 1000.00, result.present_value
+      assert_equal Money.from_amount(1000), result.present_value
       assert_equal issuance_date, result.contract_date
       assert_nil result.last_payment_at
     end
@@ -26,7 +26,7 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
       result = interpret(Debt::PaymentReceived.new(amount: 5000, at: Date.new(2025, 7, 1)),
                          given: previous_state)
 
-      assert_equal 5495.89, result.principal, "reduces principal by payment minus accrued interest"
+      assert_equal Money.from_amount(5495.89), result.principal, "reduces principal by payment minus accrued interest"
       assert_equal result.principal, result.present_value,
                    "resets present value to principal after full interest amortization"
       assert_equal result.last_payment_at, Date.new(2025, 7, 1), "records payment date as last amortization"
@@ -37,9 +37,9 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
       result = interpret(Debt::PaymentReceived.new(amount: 10495.89, at: Date.new(2025, 7, 1)),
                          given: previous_state)
 
-      assert_equal 0.00, result.principal, "sets the principal to 0"
-      assert_equal 0.00, result.present_value, "sets the present value to 0 since there is no remaining principal " \
-                                               "or interest after the repayment"
+      assert_equal Money.from_amount(0), result.principal, "sets the principal to 0"
+      assert_equal Money.from_amount(0), result.present_value, "sets the present value to 0 since there is no " \
+                                                               "remaining principal or interest after the repayment"
       assert_equal result.last_payment_at, Date.new(2025, 7, 1), "records payment date as last amortization"
     end
 
@@ -69,7 +69,7 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
         previous_state = Debt::Virtual.new(interest_rate: 0.10, contract_date: Date.new(2025, 1, 1), principal: 10000)
         result = final_state(given: previous_state, at: Time.new(2026, 1, 1))
 
-        assert_equal 11000.00, result.present_value, "accrues the interest for the entire period"
+        assert_equal Money.from_amount(11000), result.present_value, "accrues the interest for the entire period"
       end
     end
 
@@ -78,7 +78,7 @@ class VirtualDebtProjectionTest < ActiveSupport::TestCase
         post_payment_state = Debt::Virtual.new(interest_rate: 0.10, contract_date: Date.new(2025, 1, 1),
                                                principal: 5495.89, last_payment_at: Date.new(2025, 7, 1))
 
-        assert_equal 5772.94, final_state(given: post_payment_state, at: Time.new(2026, 1, 1)).present_value,
+        assert_equal Money.from_amount(5772.94), final_state(given: post_payment_state, at: Time.new(2026, 1, 1)).present_value,
                      "uses the proper residual principal (5,495.89) and accrues the interest for the period " \
                      "that starts at the last amortization (277.05)"
       end
