@@ -1,6 +1,10 @@
 module InterestCalculator
   module_function
 
+  # The parentheses are load-bearing: Money rounds to whole cents on every multiplication, so
+  # collapsing the rate and the period into a single factor first keeps the rounding to one step.
+  # Multiplying left to right instead rounds the daily interest before scaling it by the period,
+  # which drifts (10% yearly on $10,000 over 181 days: $495.89 grouped, $495.94 ungrouped).
   def simple_interest(principal, daily_rate, days)
     principal * (daily_rate * days)
   end

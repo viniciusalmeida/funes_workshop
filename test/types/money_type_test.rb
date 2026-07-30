@@ -33,6 +33,20 @@ class MoneyTypeTest < ActiveSupport::TestCase
     test "rebuilds Money from a symbol-keyed hash" do
       assert_equal Money.new(577294, "USD"), subject.cast({ cents: 577294, currency: "USD" })
     end
+
+    test "raises on types that cannot represent an amount" do
+      [ :nonsense, [ 1, 2 ], true, Object.new ].each do |value|
+        assert_raises(ArgumentError, "#{value.class} should not silently cast to nil") { subject.cast(value) }
+      end
+    end
+
+    test "raises on a hash that is missing its cents" do
+      assert_raises(KeyError) { subject.cast({ "currency" => "USD" }) }
+    end
+
+    test "treats unparseable strings as zero so form input fails validation instead of raising" do
+      assert_equal Money.from_amount(0), subject.cast("abc")
+    end
   end
 
   describe "Money#as_json" do

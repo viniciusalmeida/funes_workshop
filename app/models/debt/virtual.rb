@@ -12,10 +12,8 @@ class Debt::Virtual
   validates :principal, presence: true
   validates :interest_rate, presence: true, numericality: { greater_than: 0 }
   validates :interest_rate_base, presence: true, inclusion: { in: %w[yearly monthly daily] }
-  validates :present_value, presence: true
-  validates :present_value,
-            comparison: { greater_than_or_equal_to: 0,
-                          message: "cannot be negative - the debt is being overpaid!" },
-            allow_nil: true
+  validates :present_value, presence: true,
+                            comparison: { greater_than_or_equal_to: 0, allow_nil: true,
+                                          message: "cannot be negative - the debt is being overpaid!" }
   validates :contract_date, presence: true
 end

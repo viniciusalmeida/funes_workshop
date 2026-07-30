@@ -5,14 +5,14 @@
     <legend>Debt</legend>
 
     <p><span class="font-black">IDx:</span> <%= debt_id %></p>
-    <p><span class="font-black">Principal:</span> <%= humanized_money_with_symbol(debt.principal, no_cents_if_whole: false) %></p>
+    <p><span class="font-black">Principal:</span> <%= humanized_money_with_symbol(debt.principal) %></p>
     <p><span class="font-black">Interest:</span> <%= debt.interest_rate %> (<%= debt.interest_rate_base %>)</p>
     <p><span class="font-black">Contract date:</span> <%= debt.contract_date %></p>
     <p>
       <span class="font-black">Present value:</span>
       <span class="underline underline-offset-2 [&.highlighted]:bg-orange-400"
             data-controller="<%= "highlight" if highlight %>">
-        <%= humanized_money_with_symbol(debt.present_value, no_cents_if_whole: false) %>
+        <%= humanized_money_with_symbol(debt.present_value) %>
       </span>
     </p>
   </fieldset>
